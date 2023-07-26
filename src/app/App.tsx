@@ -1,11 +1,16 @@
 import { Component } from "react";
 import "./App.css";
+import Header from "../layouts/Header/Header";
+import Main from "../layouts/Main/Main";
+import Footer from "../layouts/Footer/Footer";
 
 class App extends Component {
   render() {
     return (
       <>
-        <h1>Ola mundo</h1>
+        <Header />
+        <Main />
+        <Footer />
       </>
     );
   }

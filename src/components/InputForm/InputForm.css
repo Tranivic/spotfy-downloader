@@ -1,0 +1,6 @@
+.url-invalid {
+  opacity: 0;
+}
+.url-valid {
+  opacity: 1;
+}

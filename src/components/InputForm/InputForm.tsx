@@ -9,6 +9,8 @@ export default class InputForm extends Component {
         isValid: false,
       },
     },
+    spotifyPlaylistRegex:
+      /^https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9_-]+)/s,
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,11 +33,12 @@ export default class InputForm extends Component {
   };
 
   validateSpotifyPlaylistURL = () => {
-    const spotifyTrackPattern: RegExp =
-      /^https:\/\/open\.spotify\.com\/playlist\/[a-zA-Z0-9_-]+/;
+    const spotifyPlaylistPattern: RegExp = new RegExp(
+      this.state.spotifyPlaylistRegex
+    );
     const url = this.state.formData.url.value;
 
-    if (spotifyTrackPattern.test(url)) {
+    if (spotifyPlaylistPattern.test(url)) {
       this.setState({
         formData: {
           ...this.state.formData,
@@ -58,10 +61,28 @@ export default class InputForm extends Component {
     }
   };
 
+  getPlaylistIdFromUrl = (url: string) => {
+    const spotifyPlaylistPattern: RegExp = new RegExp(
+      this.state.spotifyPlaylistRegex
+    );
+    const match = url.match(spotifyPlaylistPattern);
+
+    if (match && match[1]) {
+      return match[1];
+    } else {
+      return null;
+    }
+  };
+
   submitPlaylist = (event: FormEvent) => {
     event.preventDefault();
-    console.log("submitted");
-    console.log(this.state);
+    const url = this.state.formData.url.value;
+    const playlistId = this.getPlaylistIdFromUrl(url);
+
+    if (playlistId) {
+      console.log("submited");
+      console.log(playlistId);
+    }
   };
 
   render() {

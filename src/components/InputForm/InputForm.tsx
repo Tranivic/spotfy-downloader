@@ -80,7 +80,6 @@ export default class InputForm extends Component {
     const playlistId = this.getPlaylistIdFromUrl(url);
 
     if (playlistId) {
-      console.log("submited");
       console.log(playlistId);
     }
   };

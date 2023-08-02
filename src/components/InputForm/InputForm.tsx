@@ -1,114 +1,114 @@
-import React, { Component, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
+import { useDispatch } from "react-redux";
+import { fetchPlaylist } from "../../redux/slicePlaylist";
+import { FormState } from "../../types/form";
 import "./InputForm.css";
 
-export default class InputForm extends Component {
-  state = {
-    formData: {
-      url: {
-        value: "",
-        isValid: false,
-      },
+const InputForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormState["formData"]>({
+    url: {
+      value: "",
+      id: "",
+      isValid: false,
     },
-    spotifyPlaylistRegex:
-      /^https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9_-]+)/s,
-  };
+  });
 
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Set url value in state
-    this.setState(
-      {
-        formData: {
-          ...this.state.formData,
-          url: {
-            ...this.state.formData.url,
-            value: event.target.value,
-          },
-        },
+  const spotifyPlaylistRegex =
+    /^https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9_-]+)/s;
+  const dispatch = useDispatch<any>();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      url: {
+        ...prevState.url,
+        value: value,
       },
-      () => {
-        // Check if url is valid and apply classes
-        this.validateSpotifyPlaylistURL();
-      }
-    );
+    }));
+    validateSpotifyPlaylistURL(value);
   };
 
-  validateSpotifyPlaylistURL = () => {
-    const spotifyPlaylistPattern: RegExp = new RegExp(
-      this.state.spotifyPlaylistRegex
-    );
-    const url = this.state.formData.url.value;
-
+  const validateSpotifyPlaylistURL = (url: string) => {
+    const spotifyPlaylistPattern: RegExp = new RegExp(spotifyPlaylistRegex);
     if (spotifyPlaylistPattern.test(url)) {
-      this.setState({
-        formData: {
-          ...this.state.formData,
-          url: {
-            ...this.state.formData.url,
-            isValid: true,
-          },
+      setFormData((prevState) => ({
+        ...prevState,
+        url: {
+          ...prevState.url,
+          isValid: true,
         },
-      });
+      }));
     } else {
-      this.setState({
-        formData: {
-          ...this.state.formData,
-          url: {
-            ...this.state.formData.url,
-            isValid: false,
-          },
+      setFormData((prevState) => ({
+        ...prevState,
+        url: {
+          ...prevState.url,
+          isValid: false,
         },
-      });
+      }));
     }
+    setPlaylistIdFromUrl(url);
   };
 
-  getPlaylistIdFromUrl = (url: string) => {
-    const spotifyPlaylistPattern: RegExp = new RegExp(
-      this.state.spotifyPlaylistRegex
-    );
+  const setPlaylistIdFromUrl = (url: string) => {
+    const spotifyPlaylistPattern: RegExp = new RegExp(spotifyPlaylistRegex);
     const match = url.match(spotifyPlaylistPattern);
 
     if (match && match[1]) {
-      return match[1];
+      const idFromUrl = match[1];
+      setFormData((prevState) => ({
+        ...prevState,
+        url: {
+          ...prevState.url,
+          id: idFromUrl,
+        },
+      }));
     } else {
-      return null;
+      setFormData((prevState) => ({
+        ...prevState,
+        url: {
+          ...prevState.url,
+          id: "",
+        },
+      }));
     }
   };
 
-  submitPlaylist = (event: FormEvent) => {
+  const submitPlaylist = (event: FormEvent) => {
     event.preventDefault();
-    const url = this.state.formData.url.value;
-    const playlistId = this.getPlaylistIdFromUrl(url);
+    const playlistId = formData.url.id;
 
     if (playlistId) {
-      console.log(playlistId);
+      dispatch(fetchPlaylist(playlistId));
     }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.submitPlaylist}>
-        <div className="input-container flex items-center">
-          <input
-            className={`transition-all width w-full p-3 bg-transparent border border-spacing-80 border-stone-600 text-white focus:border-stone-200 outline-none focus:outline-none rounded-md`}
-            type="text"
-            placeholder="Example: https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8"
-            onChange={this.handleChange}
-          />
-          <i
-            className={`${
-              this.state.formData.url.isValid ? "url-valid" : "url-invalid"
-            } transition duration-150 ease-in-out -ml-8`}
-          >
-            ✅
-          </i>
-        </div>
-        <button
-          className="w-full py-3 bg-green-600 mt-4 hover:bg-green-800 transition-all active:scale-[0.98] rounded-md"
-          type="submit"
+  return (
+    <form onSubmit={submitPlaylist}>
+      <div className="input-container flex items-center">
+        <input
+          className={`transition-all width w-full p-3 bg-transparent border border-spacing-80 border-stone-600 text-white focus:border-stone-200 outline-none focus:outline-none rounded-md`}
+          type="text"
+          placeholder="Example: https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8"
+          onChange={handleChange}
+        />
+        <i
+          className={`${
+            formData.url.isValid ? "url-valid" : "url-invalid"
+          } transition duration-150 ease-in-out -ml-8`}
         >
-          Submit
-        </button>
-      </form>
-    );
-  }
-}
+          ✅
+        </i>
+      </div>
+      <button
+        className="w-full py-3 bg-green-600 mt-4 hover:bg-green-800 transition-all active:scale-[0.98] rounded-md"
+        type="submit"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default InputForm;

@@ -85,29 +85,36 @@ const InputForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={submitPlaylist}>
-      <div className="input-container flex items-center">
-        <input
-          className={`transition-all width w-full p-3 bg-transparent border border-spacing-80 border-stone-600 text-white focus:border-stone-200 outline-none focus:outline-none rounded-md`}
-          type="text"
-          placeholder="Example: https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8"
-          onChange={handleChange}
-        />
-        <i
-          className={`${
-            formData.url.isValid ? "url-valid" : "url-invalid"
-          } transition duration-150 ease-in-out -ml-8`}
+    <div className="form-component max-w-xxl">
+      <h1 className="text-2xl pb-4">Enter link</h1>
+      <p className="text-2xl pb-4 text-zinc-00">
+        Enter a Spotify playlist link that you would like to download tracks
+        from. Artist & podcast links aren't supported.
+      </p>
+      <form onSubmit={submitPlaylist}>
+        <div className="input-container flex items-center">
+          <input
+            className={`transition-all width w-full p-3 bg-transparent border border-spacing-80 border-stone-600 text-white focus:border-stone-200 outline-none focus:outline-none rounded-md`}
+            type="text"
+            placeholder="Example: https://open.spotify.com/playlist/4PTG3Z6ehGkBFwjybzWkR8"
+            onChange={handleChange}
+          />
+          <i
+            className={`${
+              formData.url.isValid ? "url-valid" : "url-invalid"
+            } transition duration-150 ease-in-out -ml-8`}
+          >
+            ✅
+          </i>
+        </div>
+        <button
+          className="w-full py-3 bg-green-600 mt-4 hover:bg-green-800 transition-all active:scale-[0.98] rounded-md"
+          type="submit"
         >
-          ✅
-        </i>
-      </div>
-      <button
-        className="w-full py-3 bg-green-600 mt-4 hover:bg-green-800 transition-all active:scale-[0.98] rounded-md"
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 

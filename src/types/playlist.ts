@@ -1,4 +1,4 @@
-interface Track {
+export default interface Track {
   type: "track";
   id: string;
   name: string;
@@ -56,7 +56,10 @@ interface Cover {
   url: string;
   width: number;
 }
-
+export default interface PlaylistObject {
+  items: [];
+  tolCount: number;
+}
 export default interface ResponseData {
   status: boolean;
   contents: {

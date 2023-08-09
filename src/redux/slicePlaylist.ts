@@ -44,12 +44,10 @@ const slicePlaylist = createSlice({
     builder.addCase(fetchPlaylist.fulfilled, (state, action) => {
       console.log("Fetch complete!");
       state.data = action.payload;
-      console.log(state.data);
     });
     builder.addCase(fetchPlaylist.rejected, (state) => {
       console.log("Fetch rejected!");
       state.error = "Something went wrong, try again later";
-      console.log(state.data);
     });
   },
 });

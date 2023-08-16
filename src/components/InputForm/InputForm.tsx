@@ -15,6 +15,7 @@ const InputForm: React.FC = () => {
 
   const spotifyPlaylistRegex =
     /^https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9_-]+)/s;
+
   const dispatch = useDispatch<any>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

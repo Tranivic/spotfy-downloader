@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import ResponseData from "../types/playlist.ts";
-
 const INITIAL_STATE = {
   data: {},
   error: "",
@@ -27,8 +26,8 @@ export const fetchPlaylist = createAsyncThunk(
 
     try {
       const response = await axios.request(options);
-      const responseData: ResponseData = response.data;
-      return responseData.contents;
+      const playlistresponseData: ResponseData = response.data;
+      return playlistresponseData.contents;
     } catch (error) {
       alert(error);
       return {};

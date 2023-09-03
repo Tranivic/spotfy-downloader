@@ -37,6 +37,7 @@ export const downloadTrack = createAsyncThunk(
     };
 
     const trackId = await getTrackId(trackName);
+    console.log(trackId);
 
     const options = {
       method: "GET",
@@ -51,6 +52,8 @@ export const downloadTrack = createAsyncThunk(
     try {
       const response = await axios.request(options);
       const trackDownloadResponse = response.data;
+      window.open(`${trackDownloadResponse.link}`);
+      console.log(INITIAL_STATE)
       return trackDownloadResponse;
     } catch (error) {
       alert(error);

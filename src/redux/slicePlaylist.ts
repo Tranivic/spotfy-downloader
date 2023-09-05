@@ -10,7 +10,7 @@ export const fetchPlaylist = createAsyncThunk(
   "playlist/fetch",
   async (playlistId: string) => {
     console.log("fetching..." + " " + playlistId);
-    const testApiKey = "28652ff98bmshd1532e9ddeb4628p11f9a0jsncd1c03d64966";
+    const testApiKey = "7fea4f7b2amsh89cb5a3979ea6d9p1527b7jsn616879f2a78b";
 
     const options = {
       method: "GET",

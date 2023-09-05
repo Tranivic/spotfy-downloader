@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import slicePlaylist from "./slicePlaylist";
+import sliceTrack from "./sliceTrack";
+
 const store = configureStore({
   reducer: {
     playlist: slicePlaylist,
+    track: sliceTrack,
   },
 });
 

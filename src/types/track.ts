@@ -6,3 +6,4 @@ export default interface trackDownloadResponse {
   status: string | boolean;
   msg: string;
 }
+

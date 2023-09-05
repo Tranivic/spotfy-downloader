@@ -15,9 +15,9 @@ const TrackItem: React.FC<TrackItemProps> = (props) => {
 
   const handleClickDownloadBtn = async () => {
     const trackName = `${props.track.name}  ${props.track.album.artists[0].name}`;
-    console.log(`Track selected to download "${trackName}"`);
-    dispatch(downloadTrack(trackName));
+    await dispatch(downloadTrack(trackName));
   };
+
 
   return (
     <li className="hover:scale-105 transition-all duration-200 max-w-xl py-4 px-8 rounded-xl flex justify-between w-full  border-slate-100 border my-2">

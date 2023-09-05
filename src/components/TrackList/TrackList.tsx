@@ -5,17 +5,25 @@ import Track from "../../types/playlist";
 import "./TrackList.css";
 import { useSelector } from "react-redux";
 import { useTrack } from "../../redux/sliceTrack";
+import { usePlaylist } from "../../redux/slicePlaylist";
+
 interface TrackListProps {
   playlist: PlaylistObject;
 }
 
 const TrackList: React.FC<TrackListProps> = (props) => {
   const playlist: PlaylistObject = props.playlist;
+
   const trackState = useSelector(useTrack);
+  const playlistState = useSelector(usePlaylist);
 
   useEffect(() => {
+    console.log("----------------");
     console.log(trackState);
-  }, [trackState]);
+    console.log("----------------");
+    console.log(playlistState);
+    console.log("----------------");
+  }, [trackState, playlistState]);
 
   return (
     <div className="list-component mt-10 p-2 flex flex-col items-center justify-center list-container w-screen">

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { downloadTrack } from "../../redux/sliceTrack";
+import { downloadTrackObjInterface } from "../../types/track";
 import "./TrackItem.css";
 
 interface TrackItemProps {
@@ -14,10 +15,14 @@ const TrackItem: React.FC<TrackItemProps> = (props) => {
   const dispatch = useDispatch<any>();
 
   const handleClickDownloadBtn = async () => {
-    const trackName = `${props.track.name}  ${props.track.album.artists[0].name}`;
-    await dispatch(downloadTrack(trackName));
-  };
+    
+    const downloadTrackObj: downloadTrackObjInterface = {
+      trackName: `${props.track.name}  ${props.track.album.artists[0].name}`,
+      trackId: `${props.track.id}`,
+    };
 
+    await dispatch(downloadTrack(downloadTrackObj));
+  };
 
   return (
     <li className="hover:scale-105 transition-all duration-200 max-w-xl py-4 px-8 rounded-xl flex justify-between w-full  border-slate-100 border my-2">

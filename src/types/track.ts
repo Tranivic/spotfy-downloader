@@ -1,4 +1,4 @@
-export default interface trackDownloadResponse {
+export interface trackDownloadResponse {
   link: string;
   title: string;
   progress: number;
@@ -7,3 +7,8 @@ export default interface trackDownloadResponse {
   msg: string;
 }
 
+
+export interface downloadTrackObjInterface{
+  trackName: string,
+  trackId: string,
+}

@@ -1,25 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { downloadTrackObjInterface } from "../types/track";
 import axios from "axios";
 
 const INITIAL_STATE = {
   data: {},
   error: "",
-  requestProcessing: false,
 };
 
 export const downloadTrack = createAsyncThunk(
   "track/downloadTrack",
-  async (trackName: string, { dispatch }) => {
+  async (downloadTrackObj: downloadTrackObjInterface, { dispatch }) => {
     try {
-      dispatch(trackSlice.actions.setRequestProcessing(true));
-      console.log("Downloading Track: " + trackName);
+      console.log("Downloading Track: " + downloadTrackObj.trackName);
 
       const youtubeDownloadApiKey =
         "28652ff98bmshd1532e9ddeb4628p11f9a0jsncd1c03d64966";
       const spotifyScraperApiKey =
         "7fea4f7b2amsh89cb5a3979ea6d9p1527b7jsn616879f2a78b";
 
-      const getTrackId = async (trackName: string) => {
+      const getTrackDownloadId = async (trackName: string) => {
         const options = {
           method: "GET",
           url: "https://spotify-scraper.p.rapidapi.com/v1/track/download",
@@ -36,11 +35,11 @@ export const downloadTrack = createAsyncThunk(
         return response.data.youtubeVideo.id;
       };
 
-      const extractDownloadLink = async (trackId: string) => {
+      const extractDownloadLink = async (trackDownloadId: string) => {
         const options = {
           method: "GET",
           url: "https://youtube-mp36.p.rapidapi.com/dl",
-          params: { id: trackId },
+          params: { id: trackDownloadId },
           headers: {
             "X-RapidAPI-Key": youtubeDownloadApiKey,
             "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com",
@@ -51,26 +50,25 @@ export const downloadTrack = createAsyncThunk(
         return response.data;
       };
 
-      const trackId = await getTrackId(trackName);
-      let trackLinkObj = await extractDownloadLink(trackId);
+      const trackDownloadId = await getTrackDownloadId(
+        downloadTrackObj.trackName
+      );
+      let trackLinkObj = await extractDownloadLink(trackDownloadId);
 
       // If the API returns "processing" will atempt to download again!
       while (trackLinkObj.status === "processing") {
         console.log("Status is processing, trying to download again...");
-        dispatch(trackSlice.actions.setRequestProcessing(true));
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        trackLinkObj = await extractDownloadLink(trackId);
+        trackLinkObj = await extractDownloadLink(trackDownloadId);
       }
 
       if (trackLinkObj.status === "ok") {
-        dispatch(trackSlice.actions.setRequestProcessing(false));
         dispatch(trackSlice.actions.setStateError(""));
         console.log("Status is ok");
         window.open(trackLinkObj.link);
         return trackLinkObj;
       }
       if (trackLinkObj.status === "fail") {
-        dispatch(trackSlice.actions.setRequestProcessing(false));
         dispatch(
           trackSlice.actions.setStateError("Failed, music not supported")
         );
@@ -84,7 +82,6 @@ export const downloadTrack = createAsyncThunk(
           "Error occurred trying to download the track"
         )
       );
-      dispatch(trackSlice.actions.setRequestProcessing(false));
     }
   }
 );
@@ -95,9 +92,6 @@ const trackSlice = createSlice({
   reducers: {
     setStateError: (state, action) => {
       state.error = action.payload;
-    },
-    setRequestProcessing: (state, action) => {
-      state.requestProcessing = action.payload;
     },
   },
   extraReducers: (builder) => {

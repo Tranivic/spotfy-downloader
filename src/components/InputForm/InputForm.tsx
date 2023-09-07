@@ -5,6 +5,8 @@ import { FormState } from "../../types/form";
 import "./InputForm.css";
 
 const InputForm: React.FC = () => {
+  const dispatch = useDispatch<any>();
+
   const [formData, setFormData] = useState<FormState["formData"]>({
     url: {
       value: "",
@@ -16,9 +18,8 @@ const InputForm: React.FC = () => {
   const spotifyPlaylistRegex =
     /^https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9_-]+)/s;
 
-  const dispatch = useDispatch<any>();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const keyPressHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setFormData((prevState) => ({
       ...prevState,
@@ -49,10 +50,10 @@ const InputForm: React.FC = () => {
         },
       }));
     }
-    setPlaylistIdFromUrl(url);
+    getPlaylistIdFromUrl(url);
   };
 
-  const setPlaylistIdFromUrl = (url: string) => {
+  const getPlaylistIdFromUrl = (url: string) => {
     const spotifyPlaylistPattern: RegExp = new RegExp(spotifyPlaylistRegex);
     const match = url.match(spotifyPlaylistPattern);
 
@@ -98,7 +99,7 @@ const InputForm: React.FC = () => {
             className={`transition-all width w-full p-3 bg-transparent border border-spacing-80 border-stone-600 text-white focus:border-stone-200 outline-none focus:outline-none rounded-md`}
             type="text"
             placeholder="Example: https://open.spotify.com/playlist/4PTG3Z6ehGkBFwjybzWkR8"
-            onChange={handleChange}
+            onChange={keyPressHandleChange}
           />
           <i
             className={`${
